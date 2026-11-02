@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invitación Animada - Estilo Imagen</title>
+    <style>
+        /* CONFIGURACIÓN BÁSICA */
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle, #A2D9CE 0%, #76D7C4 100%);
+            font-family: 'Arial Rounded MT Bold', 'Comic Sans MS', sans-serif;
+            overflow: hidden; 
+        }
+
+        .contenedor-interactivo {
+            position: relative;
+            cursor: pointer;
+            perspective: 1200px;
+            --escala-vista: 1;
+            transform: scale(var(--escala-vista));
+        }
+
+        .instruccion {
+            position: absolute;
+            top: -70px;
+            width: 100%;
+            text-align: center;
+            color: #2C3E50;
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            animation: flotar 1.5s ease-in-out infinite alternate;
+            z-index: 20;
+            box-sizing: border-box;
+        }
+
+        @keyframes flotar {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-12px); }
+        }
+
+        /* SOBRE (400x280) */
+        .sobre {
+            position: relative;
+            width: 400px;
+            height: 280px;
+            transition: transform 0.3s;
+        }
+
+        .contenedor-interactivo:hover .sobre {
+            transform: scale(1.02); 
+        }
+
+        .sobre-atras {
+            position: absolute;
+            inset: 0;
+            background: #F1C40F; 
+            border-radius: 12px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .sobre-lados {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            border-radius: 0 0 12px 12px;
+            z-index: 3;
+            pointer-events: none;
+        }
+        .sobre-lados::before {
+            content: ''; position: absolute; top: 0; left: 0;
+            border-width: 140px 0 140px 200px;
+            border-style: solid;
+            border-color: transparent transparent transparent #E6B800;
+        }
+        .sobre-lados::after {
+            content: ''; position: absolute; top: 0; right: 0;
+            border-width: 140px 200px 140px 0;
+            border-style: solid;
+            border-color: transparent #E6B800 transparent transparent;
+        }
+
+        .sobre-frente {
+            position: absolute;
+            bottom: 0; left: 0;
+            border-width: 0 200px 160px 200px;
+            border-style: solid;
+            border-color: transparent transparent #D4AC0D transparent;
+            z-index: 4;
+            border-radius: 0 0 12px 12px;
+            pointer-events: none;
+        }
+
+        .sobre-solapa {
+            position: absolute;
+            top: 0; left: 0;
+            border-width: 160px 200px 0 200px;
+            border-style: solid;
+            border-color: #F39C12 transparent transparent transparent;
+            transform-origin: top;
+            z-index: 5;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        }
+
+        /* =========================================
+           DISEÑO DE LA TARJETA (RÉPLICA DE LA IMAGEN)
+           ========================================= */
+        .tarjeta {
+            --escala-final: 1.5;
+            --desplazamiento-final: -40px;
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 370px;
+            height: 240px;
+            background-color: #FFFDE7; /* Fondo amarillo claro */
+            border-radius: 12px;
+            box-shadow: inset 0 0 0 4px #FAD7A1;
+            z-index: 2; 
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px 10px 10px 10px;
+            overflow: hidden;
+        }
+
+        @media (max-width: 600px) {
+            .contenedor-interactivo { --escala-vista: 0.9; }
+            .tarjeta { --escala-final: 1.1; }
+        }
+
+        @media (max-width: 420px) {
+            .contenedor-interactivo { --escala-vista: 0.8; }
+        }
+
+        @media (max-width: 360px) {
+            .contenedor-interactivo { --escala-vista: 0.72; }
+        }
+
+        @media (max-height: 640px) {
+            .tarjeta {
+                --escala-final: 1.2;
+                --desplazamiento-final: 0px;
+            }
+        }
+
+        @media (max-height: 480px) {
+            .tarjeta { --escala-final: 0.95; }
+        }
+
+        @media (max-height: 360px) {
+            .tarjeta { --escala-final: 0.7; }
+        }
+
+        /* Banderines superiores (SVG insertado como fondo) */
+        .banderines {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 30px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 20' preserveAspectRatio='none'%3E%3Cpolygon points='0,0 12.5,0 6.25,20' fill='%23FF4B4B'/%3E%3Cpolygon points='12.5,0 25,0 18.75,20' fill='%2306D6A0'/%3E%3Cpolygon points='25,0 37.5,0 31.25,20' fill='%23118AB2'/%3E%3Cpolygon points='37.5,0 50,0 43.75,20' fill='%23FFD166'/%3E%3Cpolygon points='50,0 62.5,0 56.25,20' fill='%23FF9F1C'/%3E%3Cpolygon points='62.5,0 75,0 68.75,20' fill='%23FF4B4B'/%3E%3Cpolygon points='75,0 87.5,0 81.25,20' fill='%2306D6A0'/%3E%3Cpolygon points='87.5,0 100,0 93.75,20' fill='%23118AB2'/%3E%3C/svg%3E");
+            background-size: cover;
+        }
+
+        /* Decoraciones de fondo (confeti) */
+        .confeti {
+            position: absolute;
+            width: 100%; height: 100%;
+            background-image: 
+                radial-gradient(circle at 10% 20%, #FF4B4B 2px, transparent 3px),
+                radial-gradient(circle at 90% 15%, #118AB2 2px, transparent 3px),
+                radial-gradient(circle at 15% 80%, #06D6A0 2px, transparent 3px),
+                radial-gradient(circle at 85% 85%, #FFD166 2px, transparent 3px);
+            opacity: 0.8;
+            pointer-events: none;
+        }
+
+        /* Emojis flotantes imitando la imagen */
+        .deco { position: absolute; font-size: 1.5rem; }
+        .globo { top: 25px; left: 10px; font-size: 2.2rem; }
+        .estrella { top: 40px; right: 20px; font-size: 1.5rem; }
+        .gorro-izq { bottom: 5px; left: 10px; font-size: 2.2rem; transform: rotate(-15deg); }
+        .gorro-der { bottom: 5px; right: 10px; font-size: 2.2rem; transform: rotate(15deg); }
+
+        /* Textos del título con bordes (stroke) imitando burbujas */
+        .tit-azul {
+            color: #118AB2;
+            font-size: 1.8rem;
+            margin: 10px 0 -5px 0;
+            -webkit-text-stroke: 1.5px #2C3E50;
+            text-shadow: 2px 2px 0px #FFF;
+        }
+        .tit-rojo {
+            color: #FF4B4B;
+            font-size: 2.1rem;
+            margin: 0;
+            -webkit-text-stroke: 1.5px #2C3E50;
+            text-shadow: 2px 2px 0px #FFF;
+        }
+
+        /* Etiqueta "PRE-JARDÍN" con cintas */
+        .cinta-contenedor {
+            position: relative;
+            margin: 8px 0;
+            display: inline-block;
+        }
+        .cinta-azul {
+            position: absolute;
+            top: 2px; left: -10px; right: -10px; bottom: 2px;
+            background-color: #118AB2;
+            clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 10px 100%, 0 50%);
+            border: 1.5px solid #2C3E50;
+            z-index: 1;
+        }
+        .cinta-naranja {
+            position: relative;
+            background-color: #FF9F1C;
+            color: white;
+            padding: 3px 15px;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            -webkit-text-stroke: 0.5px #2C3E50;
+            border: 1.5px solid #2C3E50;
+            z-index: 2;
+        }
+
+        /* Cuerpo del texto */
+        .intro {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #000;
+            margin: 5px 0;
+            line-height: 1.2;
+        }
+
+        .detalles {
+            font-size: 0.75rem;
+            color: #000;
+            font-weight: bold;
+            line-height: 1.3;
+            margin: 5px 0;
+        }
+        .detalles p { margin: 2px 0; }
+        .resalte { color: #C0392B; } /* Color rojo oscuro para etiquetas como en la imagen */
+
+        .cierre {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #000;
+            margin: 5px 0 0 0;
+        }
+
+        /* =========================================
+           ANIMACIÓN AL ABRIR
+           ========================================= */
+        
+        .abierto .instruccion { display: none; }
+        
+        .abierto .sobre-solapa {
+            transform: rotateX(180deg);
+            z-index: 1; 
+        }
+
+        .abierto .tarjeta {
+            animation: sacarTarjeta 2.2s forwards;
+            animation-delay: 0.3s; 
+        }
+
+        @keyframes sacarTarjeta {
+            0%   { transform: translateY(0) scale(1); height: 240px; overflow: hidden; z-index: 2; }
+            40%  { transform: translateY(-340px) scale(1); height: 240px; overflow: hidden; z-index: 2; }
+            45%  { transform: translateY(-340px) scale(1); height: 240px; overflow: visible; z-index: 10; } 
+            100% { transform: translateY(var(--desplazamiento-final)) scale(var(--escala-final)); height: 360px; overflow: visible; z-index: 10; box-shadow: 0 20px 40px rgba(0,0,0,0.4); } 
+        }
+    </style>
+</head>
+<body>
+
+    <div class="contenedor-interactivo" id="miSobre" onclick="abrirInvitacion()">
+        
+        <div class="instruccion">👆 Toca el sobre 💌</div>
+        
+        <div class="sobre">
+            <div class="sobre-atras"></div>
+            
+            <!-- TARJETA CREADA CON HTML/CSS IMITANDO LA IMAGEN -->
+            <div class="tarjeta">
+                <div class="confeti"></div>
+                <div class="banderines"></div>
+                
+                <div class="deco globo">🎈</div>
+                <div class="deco estrella">⭐</div>
+                <div class="deco gorro-izq">🎓</div>
+                <div class="deco gorro-der">🎓</div>
+
+                <h2 class="tit-azul">¡MI GRAN</h2>
+                <h1 class="tit-rojo">GRADUACIÓN!</h1>
+                
+                <div class="cinta-contenedor">
+                    <div class="cinta-azul"></div>
+                    <div class="cinta-naranja">PRE-JARDÍN</div>
+                </div>
+
+                <p class="intro">¡Te invitamos a celebrar el fin<br>de esta hermosa etapa!</p>
+                
+                <div class="detalles">
+                    <p><span class="resalte">FECHA:</span> Jueve, 26 de Noviembre</p>
+                    <p><span class="resalte">HORA:</span> 19:00 PM</p>
+                    <p><span class="resalte">LUGAR:</span> A Confirmar</p>
+                    <p><span class="resalte">DIRECCIÓN:</span></p>
+                </div>
+                
+                <p class="cierre">👏 ¡No faltes! 🎈</p>
+            </div>
+            
+            <div class="sobre-lados"></div>
+            <div class="sobre-frente"></div>
+            <div class="sobre-solapa"></div>
+        </div>
+    </div>
+
+    <script>
+        function abrirInvitacion() {
+            const sobre = document.getElementById('miSobre');
+            if (!sobre.classList.contains('abierto')) {
+                sobre.classList.add('abierto');
+            }
+        }
+    </script>
+
+</body>
+</html>
